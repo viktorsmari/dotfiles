@@ -145,7 +145,7 @@ assign [class="Nautilus"]      $ws10
 bindsym $mod+ctrl+4 workspace $ws4; exec firefox
 bindsym $mod+ctrl+6 workspace $ws6; exec signal-desktop
 bindsym $mod+ctrl+7 workspace $ws7; exec Thunar
-bindsym $mod+ctrl+8 workspace $ws8; exec spotify --force-device-scale-factor=1.5 --enable-features=UseOzonePlatform --ozone-platform=wayland
+bindsym $mod+ctrl+8 workspace $ws8; exec spotify
 
 # Switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -263,6 +263,8 @@ bindsym $mod+button2 kill
 #bindsym $mod+shift+s exec grim -g "$(slurp)" | wl-copy
 bindsym $mod+shift+s exec grim -g "$(slurp)" /tmp/screenshot.png && cp /tmp/screenshot.png ~/Pictures/screenshots/$(date +%Y-%m-%d-%H-%M-%S).png && wl-copy < /tmp/screenshot.png
 bindsym $mod+shift+ctrl+s exec grimshot --wait 4 --notify copy area
+#bindsym $mod+shift+r exec wf-recorder -g "$(slurp)" -f ~/Videos/$(date +%Y-%m-%d-%H-%M-%S).mp4
+bindsym $mod+shift+r exec ~/dotfiles/scripts/screen-record.sh
 bindsym $mod+tab workspace back_and_forth
 bindsym $mod+ctrl+shift+l exec systemctl suspend #no password locking
 bindsym $mod+Shift+g move workspace to output left
@@ -278,6 +280,14 @@ input "type:keyboard" {
   repeat_rate 30
   repeat_delay 250
   xkb_numlock enabled
+}
+
+input "type:touchpad" {
+    tap enabled
+    tap_button_map lrm  # Left = 1 finger, Right = 2 fingers, Middle = 3 fingers
+    natural_scroll enabled
+    scroll_method two_finger
+    dwt enabled  # Disable-while-typing
 }
 
 # use meta + i to switch to icelandic layout
@@ -320,11 +330,3 @@ bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
-
-input "type:touchpad" {
-    tap enabled
-    tap_button_map lrm  # Left = 1 finger, Right = 2 fingers, Middle = 3 fingers
-    natural_scroll enabled
-    scroll_method two_finger
-    dwt enabled  # Disable-while-typing
-}

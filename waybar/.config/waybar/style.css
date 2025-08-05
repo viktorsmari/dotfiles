@@ -29,14 +29,26 @@ window#waybar {
   background-color: #cdd6f4;
 }
 
-#workspaces button.active {
-  background-color: red;
+#workspaces button.active,
+#workspaces button.focused {
   color: #009900;
 }
 
 #workspaces button.urgent {
   background-color: #1e1e2e;
   color: #f38ba8;
+}
+
+#custom-recording {
+  color: #ff0000;
+  margin-right: 8px;
+  animation: blink 2s linear infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 #clock,

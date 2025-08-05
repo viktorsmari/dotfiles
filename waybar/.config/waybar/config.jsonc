@@ -10,7 +10,8 @@
         "sway/workspaces",
         "sway/mode",
         "sway/scratchpad",
-        "custom/media"
+        "custom/media",
+        "custom/recording"
     ],
     "modules-center": [
         //"sway/window"
@@ -38,15 +39,17 @@
         "disable-scroll": false,
         "all-outputs": false,
         "warp-on-scroll": true,
-	"format": "{index}:{name} {icon}",
+        "disable-scroll-wraparound": true,
+        "enable-bar-scroll": true,
+        "format": "{index}:{name} {icon}",
         "format-icons": {
-            "1": "",
-            "2": "",
+            "1": "",
+            "2": "",
             "3": "",
-            "4": "",
-            "5": "",
+            "6": "",
+            "8": "",
             "urgent": "",
-            "focused": "",
+            "focused": "",
             "default": ""
         }
     },
@@ -202,7 +205,12 @@
             "default": "🎜"
         },
         "escape": true,
-         "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+        "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    },
+    "custom/recording": {
+      "exec": "pgrep -x wf-recorder > /dev/null && echo '● Recording' || echo ''",
+      "interval": 1,
+      "format": "{text}"
     },
     "custom/power": {
       "format" : "⏻ ",

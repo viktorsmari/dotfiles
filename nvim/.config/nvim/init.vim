@@ -35,12 +35,6 @@ Plug 'tpope/vim-fugitive'
 
 Plug 'kshenoy/vim-signature'   " display marks in gutter
 
-"Colorscheme
-"Plug 'crusoexia/vim-monokai'
-"Plug 'phanviet/vim-monokai-pro'
-"Plug 'joshdick/onedark.vim'
-"Plug 'projekt0n/github-nvim-theme'
-
 "Plug 'tpope/vim-surround'
 "Plug 'Valloric/MatchTagAlways' " match divs
 
@@ -48,10 +42,9 @@ Plug 'kshenoy/vim-signature'   " display marks in gutter
 " Initialize plugin system
 call plug#end()
 
+colorscheme slate
 syntax enable
 "set background=light
-"colorscheme onedark
-"colorscheme github_dark_colorblind
 
 set cursorline               " highlight current line
 set cursorcolumn             " highlight current line
@@ -79,8 +72,8 @@ set ignorecase      " ignore case when searching
 set smartcase       " ignore case if search pattern is lower case
 
 " folding
-"set foldmethod=indent
-"set foldlevel=20
+set foldmethod=indent
+set foldlevel=20
 
 " Open new split panes to right and bottom, which feels more natural
 set splitbelow
