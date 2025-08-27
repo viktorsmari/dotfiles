@@ -182,7 +182,7 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 "use this to search for the word under the cursor using Telescope
-nnoremap <Leader>a :lua require('telescope.builtin').grep_string({ search = vim.fn.expand('<cword>') })<CR>
+nnoremap <Leader>a <cmd>Telescope live_grep<cr>
 nnoremap <Leader>A :lua require('telescope.builtin').grep_string({ search = vim.fn.expand('<cword>') })<CR>
 
 " Use <F2> to toggle between 'paste' and 'nopaste'

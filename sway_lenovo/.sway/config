@@ -304,13 +304,14 @@ output HDMI-A-1 pos 1920 0 res 1920x1080
 workspace $ws1 output HDMI-A-1
 workspace $ws2 output eDP-1
 
+exec_always pkill waybar
 exec blueman-applet
+exec_always waybar
 # Open Chrome on workspace 1 with Wayland support
 exec swaymsg 'workspace $ws1; exec google-chrome --enable-features=UseOzonePlatform --ozone-platform=wayland  --password-store=gnome-keyring'
 #exec nm-tray
 #exec pasystray
 exec_always copyq # does not work with only exec copyq
-exec_always pkill waybar && waybar
 #exec_always mako
 #exec_always dunst
 exec swaymsg 'workspace $ws2; exec alacritty --working-directory=/home/viktor/dev/youwind'
