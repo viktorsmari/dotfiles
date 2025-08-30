@@ -238,21 +238,21 @@ bindsym $mod+r mode "resize"
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
-#bar {
+bar {
   #position bottom
 
 # When the status_command prints a new line to stdout, swaybar updates.
 # The default just shows the current date and time.
   #status_command while date +'%Y-%m-%d %I:%M:%S %p'; do sleep 1; done
   #status_command i3status
-  #status_command waybar
+  swaybar_command waybar
 
   #colors {
     #statusline #ffffff
     #background #323232
     #inactive_workspace #000000 #222222 #cccccc
   #}
-#}
+}
 
 include /etc/sway/config.d/*
 
@@ -304,9 +304,7 @@ output HDMI-A-1 pos 1920 0 res 1920x1080
 workspace $ws1 output HDMI-A-1
 workspace $ws2 output eDP-1
 
-exec_always pkill waybar
 exec blueman-applet
-exec_always waybar
 # Open Chrome on workspace 1 with Wayland support
 exec swaymsg 'workspace $ws1; exec google-chrome --enable-features=UseOzonePlatform --ozone-platform=wayland  --password-store=gnome-keyring'
 #exec nm-tray
