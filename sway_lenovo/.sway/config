@@ -76,7 +76,9 @@ bindsym $mod+Shift+q kill
 
 # Start your launcher
 #bindsym $mod+d exec $menu
-bindsym $mod+d exec rofi -show combi -theme solarized -font "hack 10" -icon-theme "Papirus" -show-icons
+bindsym $mod+d exec fuzzel
+bindsym $mod+Shift+d exec wofi --show drun
+bindsym $mod+Ctrl+d exec rofi -show combi -theme solarized -font "hack 10" -icon-theme "Papirus" -show-icons
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
