@@ -75,7 +75,8 @@ bindsym $mod+Shift+q kill
 
 # Start your launcher
 #bindsym $mod+d exec $menu
-bindsym $mod+d exec rofi -show combi -theme solarized -font "hack 10" -icon-theme "Papirus" -show-icons
+bindsym $mod+Shift+d exec rofi -show combi -theme solarized -font "hack 10" -icon-theme "Papirus" -show-icons
+bindsym $mod+d exec fuzzel
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
@@ -258,6 +259,7 @@ include /etc/sway/config.d/*
 
 bindsym $mod+button2 kill
 #bindsym $mod+shift+s exec grim -g "$(slurp)" ~/Pictures/screenshots/$(date +%Y-%m-%d-%H-%M-%S).png
+bindsym $mod+shift+r exec ~/dotfiles/scripts/screen-record.sh
 # If we only want to copy the screenshot to the clipboard:
 #bindsym $mod+shift+s exec grim -g "$(slurp)" | wl-copy
 bindsym $mod+shift+s exec grim -g "$(slurp)" /tmp/screenshot.png && cp /tmp/screenshot.png ~/Pictures/screenshots/$(date +%Y-%m-%d-%H-%M-%S).png && wl-copy < /tmp/screenshot.png
@@ -265,6 +267,7 @@ bindsym $mod+shift+ctrl+s exec grimshot --wait 4 --notify copy area
 bindsym $mod+tab workspace back_and_forth
 bindsym $mod+ctrl+shift+l exec systemctl suspend #no password locking
 bindsym $mod+Shift+g move workspace to output left
+bindsym $mod+ctrl+Shift+c exec grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy
 
 # Spotify next / prev
 bindsym $mod+ctrl+Down  exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
