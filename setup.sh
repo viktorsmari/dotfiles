@@ -15,6 +15,11 @@ ensure_installed() {
     echo "stow could not be found, installing stow..."
     sudo apt-get install -y stow
   fi
+
+  if ! command -v curl &> /dev/null; then
+    echo "curl could not be found, installing curl..."
+    sudo apt-get install -y curl
+  fi
 }
 
 ensure_installed
