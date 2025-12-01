@@ -25,18 +25,17 @@ ensure_installed() {
 ensure_installed
 
 echo "Cloning repo and linking configs..."
-if [ -d ~/dotfiles ]; then
+if [ -d "$HOME/dotfiles" ]; then
   echo "Directory ~/dotfiles already exists. Not cloning repo again!"
 else
   echo "Cloning i3 repo..."
-  git clone https://github.com/viktorsmari/dotfiles.git ~/dotfiles
+  git clone https://github.com/viktorsmari/dotfiles.git "$HOME/dotfiles"
 fi
 
-cd ~/dotfiles || exit
-# print out current directory
+cd "$HOME/dotfiles" || exit
 echo "Current directory: $(pwd)"
 
-mkdir -p ~/Pictures/screenshots
+mkdir -p "$HOME/Pictures/screenshots"
 
 picked=$(
   printf '%s\n' \
@@ -54,8 +53,6 @@ grep -Fxq "neovim + plugins" <<<"$picked" && USE_NEOVIM=y
 grep -Fxq "vim + plugins" <<<"$picked"    && USE_VIM=y
 grep -Fxq "mise" <<<"$picked"             && USE_MISE=y
 grep -Fxq "git config" <<<"$picked"       && USE_GIT=y
-
-#echo "i3=$USE_I3 deps=$USE_DEP ohmyzsh=$USE_OHMZ neovim=$USE_NEOVIM vim=$USE_VIM mise=$USE_MISE git=$USE_GIT"
 
 if [[ $USE_DEP = 'y' ]]; then
   echo -e "======== Install programs ========\n"
@@ -90,19 +87,18 @@ if [[ $USE_DEP = 'y' ]]; then
 fi
 
 if [[ $USE_SWAY = 'y' ]]; then
-  #echo "installing sway"
-  sudo apt install -y sway
+  sudo apt-get install -y sway
 fi
 
 if [[ $USE_I3 = 'y' ]]; then
   sudo apt-get install -y i3
 
   # Link i3 status bar
-  ln -s ~/dotfiles/i3status.conf ~/.i3status.conf
-  ln -s ~/dotfiles/i3blocks.conf ~/.i3blocks.conf
+  ln -s "$HOME/dotfiles/i3status.conf" "$HOME/.i3status.conf"
+  ln -s "$HOME/dotfiles/i3blocks.conf" "$HOME/.i3blocks.conf"
 
   # Create the first config
-  ~/dotfiles/generatei3.sh
+  "$HOME/dotfiles/generatei3.sh"
 fi
 
 if [[ $USE_GIT = 'y' ]]; then
@@ -118,65 +114,60 @@ if [[ $USE_GIT = 'y' ]]; then
   git config --global pull.rebase true
   git config --global push.default matching
   git config --global push.followTags true
-  git config --global user.email $MY_EMAIL
-  git config --global user.name $MY_USER
+  git config --global user.email "$MY_EMAIL"
+  git config --global user.name "$MY_USER"
 fi
-
 
 if [[ $USE_OHMZ = 'y' ]]; then
   echo -e "\n======== Setup oh-my-zsh ========\n"
   echo -e "Remember to check if there is a newer way of installing oh-my-zsh?\n"
 
-  #TODO (fails): Change default shell to ZSH
-  sudo chsh -s /bin/zsh
+  # Change default shell to ZSH for current user (not root)
+  chsh -s /bin/zsh
 
-  # install oh my zsh
-  sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  # install oh my zsh (use curl, ensured installed above)
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
   # link my zsh config
   stow zsh
 
   echo -e "\ncloning zsh-autosuggestions... did not work the last time!\n"
-  #git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-  source ~/dotfiles/scripts/install_zsh-autosuggestions.sh
+  source "$HOME/dotfiles/scripts/install_zsh-autosuggestions.sh"
 
-  echo -e "\nYou must add it to .zshrc plugins()"
+  echo -e "\nYou must add it to .zshrc plugins()\n"
+  echo "If your shell is not zsh after running this script, please log out and log back in, or run 'zsh' manually."
 fi
 
 if [[ $USE_MISE = 'y' ]]; then
   echo -e "\n======== Setup mise ========\n"
   curl https://mise.run | sh
-  echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
+  echo 'eval "$(~/.local/bin/mise activate zsh)"' >> "$HOME/.zshrc"
 fi
 
 if [[ $USE_NEOVIM = 'y' ]]; then
   echo -e "======== Setup neovim ========\n"
   sudo apt-get install -y neovim
-  mkdir ~/.config/nvim
+  mkdir -p "$HOME/.config/nvim"
   stow nvim
 
   echo -e "installing plug for nvim...\n"
-  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+  curl -fLo "$HOME/.local/share/nvim/site/autoload/plug.vim" --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-  # Install plugins
   nvim -c 'PlugInstall' -c 'qa!'
 fi
 
 if [[ $USE_VIM = 'y' ]]; then
   echo -e "\n======== Setup vim ========\n"
 
-  # Get Vundle, Vim plugin manager
-  git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  git clone https://github.com/gmarik/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
 
   stow vim
 
-  # Get vim color scheme monokai
-  mkdir -p ~/.vim/colors
-  wget https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim -P ~/.vim/colors
-  wget https://raw.githubusercontent.com/sickill/vim-monokai/master/colors/monokai.vim -P ~/.vim/colors
+  mkdir -p "$HOME/.vim/colors"
+  wget https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim -P "$HOME/.vim/colors"
+  wget https://raw.githubusercontent.com/sickill/vim-monokai/master/colors/monokai.vim -P "$HOME/.vim/colors"
 
-  # Install plugins
   vim -c 'PluginInstall' -c 'qa!'
 fi
 
