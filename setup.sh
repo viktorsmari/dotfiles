@@ -80,6 +80,8 @@ if [[ $USE_DEP = 'y' ]]; then
   sudo apt-get install -y silversearcher-ag pwgen powerline \
     postgresql postgresql-contrib libpq-dev \
     inotify-tools jq ncdu \
+    fuzzel \
+    i3status \
     libpq-dev zlib1g-dev
 
   # Packages for X
@@ -120,6 +122,33 @@ if [[ $USE_GIT = 'y' ]]; then
   git config --global user.name $MY_USER
 fi
 
+
+if [[ $USE_OHMZ = 'y' ]]; then
+  echo -e "\n======== Setup oh-my-zsh ========\n"
+  echo -e "Remember to check if there is a newer way of installing oh-my-zsh?\n"
+
+  #TODO (fails): Change default shell to ZSH
+  sudo chsh -s /bin/zsh
+
+  # install oh my zsh
+  sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+  # link my zsh config
+  stow zsh
+
+  echo -e "\ncloning zsh-autosuggestions... did not work the last time!\n"
+  #git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  source ~/dotfiles/scripts/install_zsh-autosuggestions.sh
+
+  echo -e "\nYou must add it to .zshrc plugins()"
+fi
+
+if [[ $USE_MISE = 'y' ]]; then
+  echo -e "\n======== Setup mise ========\n"
+  curl https://mise.run | sh
+  echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
+fi
+
 if [[ $USE_NEOVIM = 'y' ]]; then
   echo -e "======== Setup neovim ========\n"
   sudo apt-get install -y neovim
@@ -149,32 +178,6 @@ if [[ $USE_VIM = 'y' ]]; then
 
   # Install plugins
   vim -c 'PluginInstall' -c 'qa!'
-fi
-
-if [[ $USE_OHMZ = 'y' ]]; then
-  echo -e "\n======== Setup oh-my-zsh ========\n"
-  echo -e "Remember to check if there is a newer way of installing oh-my-zsh?\n"
-
-  #TODO (fails): Change default shell to ZSH
-  sudo chsh -s /bin/zsh
-
-  # install oh my zsh
-  sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-  # link my zsh config
-  stow zsh
-
-  echo -e "\ncloning zsh-autosuggestions... did not work the last time!\n"
-  #git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-  source ~/dotfiles/scripts/install_zsh-autosuggestions.sh
-
-  echo -e "\nYou must add it to .zshrc plugins()"
-fi
-
-if [[ $USE_MISE = 'y' ]]; then
-  echo -e "\n======== Setup mise ========\n"
-  curl https://mise.run | sh
-  echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
 fi
 
 echo -e 'All done!\n'
