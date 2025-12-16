@@ -64,6 +64,7 @@ if [[ $USE_DEP = 'y' ]]; then
     tree htop whois thunar bmon \
     btop \
     alacritty \
+    ripgrep \
     vim-gtk3 \
     vim \
     libyaml-dev \
@@ -126,7 +127,7 @@ if [[ $USE_OHMZ = 'y' ]]; then
   chsh -s /bin/zsh
 
   # install oh my zsh (use curl, ensured installed above)
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
   # link my zsh config
   stow zsh
@@ -134,7 +135,7 @@ if [[ $USE_OHMZ = 'y' ]]; then
   echo -e "\ncloning zsh-autosuggestions... did not work the last time!\n"
   source "$HOME/dotfiles/scripts/install_zsh-autosuggestions.sh"
 
-  echo -e "\nYou must add it to .zshrc plugins()\n"
+  omz plugin enable git z zsh-autosuggestions
   echo "If your shell is not zsh after running this script, please log out and log back in, or run 'zsh' manually."
 fi
 

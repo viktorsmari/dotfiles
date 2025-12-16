@@ -308,7 +308,7 @@ workspace $ws2 output eDP-1
 
 exec blueman-applet
 # Open Chrome on workspace 1 with Wayland support
-exec swaymsg 'workspace $ws1; exec google-chrome --enable-features=UseOzonePlatform --ozone-platform=wayland  --password-store=gnome-keyring'
+exec swaymsg 'workspace $ws1; exec google-chrome'
 #exec nm-tray
 #exec pasystray
 exec_always copyq # does not work with only exec copyq

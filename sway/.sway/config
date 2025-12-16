@@ -69,6 +69,7 @@ titlebar_padding 1
 #
 # Start a terminal
 bindsym $mod+Return exec $term
+bindsym $mod+Ctrl+Return exec ghostty
 bindsym $mod+Shift+Return exec foot
 # Kill focused window
 bindsym $mod+Shift+q kill
@@ -77,6 +78,13 @@ bindsym $mod+Shift+q kill
 #bindsym $mod+d exec $menu
 bindsym $mod+Shift+d exec rofi -show combi -theme solarized -font "hack 10" -icon-theme "Papirus" -show-icons
 bindsym $mod+d exec fuzzel
+
+# Start cliphist watcher once per session
+exec_always wl-paste --type text  --watch cliphist store
+exec_always wl-paste --type image --watch cliphist store
+
+# Clipboard history with fuzzel (Mod+Shift+V)
+bindsym $mod+Shift+v exec cliphist list | fuzzel --dmenu | cliphist decode | wl-copy
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
@@ -140,13 +148,15 @@ assign [class="Signal"]        $ws6
 assign [class="signal-desktop"] $ws6
 assign [class="Spotify"]       $ws8
 assign [class="spotify"]       $ws8
+assign [class="Google-chrome"] $ws1
+assign [app_id="google-chrome"] $ws1
 assign [class="Gimp"]          $ws10
 assign [class="Nautilus"]      $ws10
 
 bindsym $mod+ctrl+4 workspace $ws4; exec firefox
 bindsym $mod+ctrl+6 workspace $ws6; exec signal-desktop
 bindsym $mod+ctrl+7 workspace $ws7; exec Thunar
-bindsym $mod+ctrl+8 workspace $ws8; exec spotify --force-device-scale-factor=1.5 --enable-features=UseOzonePlatform --ozone-platform=wayland
+bindsym $mod+ctrl+8 workspace $ws8; exec spotify --ozone-platform=wayland
 
 # Switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -296,13 +306,12 @@ output DP-3 pos 1920 0 res 3840x2160 scale 1.5
 workspace $ws1 output DP-3
 workspace $ws2 output DP-2
 
-exec blueman-applet
 # Open Chrome on workspace 1 with Wayland support
-exec swaymsg 'workspace $ws1; exec google-chrome --enable-features=UseOzonePlatform --ozone-platform=wayland'
+exec swaymsg 'workspace $ws1; exec google-chrome'
 #exec nm-tray
 #exec pasystray
-exec_always copyq # does not work with only exec copyq
-#exec_always mako
+#exec_always copyq # does not work with only exec copyq
+exec_always mako
 #exec_always dunst
 exec swaymsg 'workspace $ws2; exec alacritty --working-directory=/home/viktor/dev/youwind'
 exec swaymsg 'workspace $ws2; exec alacritty --working-directory=/home/viktor/dev/youwind'

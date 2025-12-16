@@ -7,14 +7,11 @@
     "spacing": 10, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
-        "sway/workspaces",
-        "sway/mode",
-        "sway/scratchpad",
+        "hyprland/workspaces",
         "custom/media",
         "custom/recording"
     ],
     "modules-center": [
-        //"sway/window"
         "clock"
     ],
     "modules-right": [
@@ -22,35 +19,44 @@
         "idle_inhibitor",
         "pulseaudio",
         "network",
-        "power-profiles-daemon",
+        //"power-profiles-daemon",
         "cpu",
         "memory",
         "temperature",
         "backlight",
         "keyboard-state",
-        "sway/language",
+        "hyprland/language",
         "battery",
         "battery#bat0",
         "tray",
         "custom/power"
     ],
     // Modules configuration
-    "sway/workspaces": {
+    "hyprland/workspaces": {
         "disable-scroll": false,
         "all-outputs": false,
         "warp-on-scroll": true,
         "disable-scroll-wraparound": true,
         "enable-bar-scroll": true,
-        "format": "{index}:{name} {icon}",
+        "on-scroll-up": "hyprctl dispatch workspace e-1",
+        "on-scroll-down": "hyprctl dispatch workspace e+1",
+        "persistent-workspaces": {
+            "DP-2": [ "1", "2", "3", "4", "5" ],
+            "DP-3": [ "6", "7", "8", "9", "10" ]
+        },
+        "format": "{icon}",
         "format-icons": {
-            "1": "",
-            "2": "",
-            "3": "",
-            "6": "",
-            "8": "",
-            "urgent": "",
-            "focused": "",
-            "default": ""
+            "1": "1:Chrome",
+            "2": "2:youwind",
+            "3": "3:repero",
+            "4": "4:Term",
+            "5": "5:Chat",
+            "6": "6:Signal",
+            "7": "7:Seven",
+            "8": "8:Spotify",
+            "9": "9:Nine",
+            "10": "10:Gimp",
+            "default": "{id}"
         }
     },
     "keyboard-state": {
@@ -62,15 +68,19 @@
             "unlocked": ""
         }
     },
-    "sway/mode": {
-        "format": "<span style=\"italic\">{}</span>"
+    "hyprland/language": {
+        "format": "{short}"
     },
-    "sway/scratchpad": {
-        "format": "{icon} {count}",
-        "show-empty": false,
-        "format-icons": ["", ""],
-        "tooltip": true,
-        "tooltip-format": "{app}: {title}"
+    "wlr/taskbar": {
+        "format": "{title}",
+        "max-length": 40,
+        "icon-size": 18,
+        "spacing": 6,
+        "all-outputs": true,
+        "on-click": "activate",
+        "on-click-middle": "close",
+        "on-click-right": "minimize",
+        "tooltip-format": "{app_id}\n{title}"
     },
     "mpd": {
         "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",

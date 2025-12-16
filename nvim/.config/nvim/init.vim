@@ -38,6 +38,10 @@ Plug 'kshenoy/vim-signature'   " display marks in gutter
 "Plug 'tpope/vim-surround'
 "Plug 'Valloric/MatchTagAlways' " match divs
 
+"GitGutter: refresh signs quickly while editing
+let g:gitgutter_realtime = 1
+let g:gitgutter_eager = 1
+
 " On-demand loading
 " Initialize plugin system
 call plug#end()
@@ -51,6 +55,8 @@ set cursorcolumn             " highlight current line
 "set hidden
 "set laststatus=2             " window will always have a status line
 set list
+" Make CursorHold fire quickly so gitgutter refreshes promptly
+set updatetime=200
 "set mouse=a
 "set nobackup
 "set noswapfile
