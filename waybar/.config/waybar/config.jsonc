@@ -8,11 +8,12 @@
     // Choose the order of the modules
     "modules-left": [
         "hyprland/workspaces",
-        "custom/media",
         "custom/recording"
     ],
     "modules-center": [
-        "clock"
+        //"hyprland/window",
+        "clock",
+        "custom/media"
     ],
     "modules-right": [
         "mpd",
@@ -21,13 +22,14 @@
         "network",
         //"power-profiles-daemon",
         "cpu",
+        "disk",
         "memory",
         "temperature",
         "backlight",
         "keyboard-state",
         "hyprland/language",
-        "battery",
-        "battery#bat0",
+        //"battery",
+        //"battery#bat0",
         "tray",
         "custom/power"
     ],
@@ -38,12 +40,8 @@
         "warp-on-scroll": true,
         "disable-scroll-wraparound": true,
         "enable-bar-scroll": true,
-        "on-scroll-up": "hyprctl dispatch workspace e-1",
-        "on-scroll-down": "hyprctl dispatch workspace e+1",
-        "persistent-workspaces": {
-            "DP-2": [ "1", "2", "3", "4", "5" ],
-            "DP-3": [ "6", "7", "8", "9", "10" ]
-        },
+        "on-scroll-up": "hyprctl dispatch workspace m-1",
+        "on-scroll-down": "hyprctl dispatch workspace m+1",
         "format": "{icon}",
         "format-icons": {
             "1": "1:Chrome",
@@ -70,6 +68,13 @@
     },
     "hyprland/language": {
         "format": "{short}"
+    },
+    "hyprland/window": {
+        "format": "{title}",
+        "max-length": 60,
+        "rewrite": {
+            "^$": "Desktop"
+        }
     },
     "wlr/taskbar": {
         "format": "{title}",
@@ -132,6 +137,10 @@
     "cpu": {
         "format": "{usage}% ",
         "tooltip": false
+    },
+    "disk": {
+        "path": "/",
+        "format": "{percentage_used}% "
     },
     "memory": {
         "format": "{}% "
@@ -216,6 +225,11 @@
         },
         "escape": true,
         "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    },
+    "custom/recording": {
+      "exec": "pgrep -x wf-recorder > /dev/null && echo '● Recording' || echo ''",
+      "interval": 1,
+      "format": "{text}"
     },
     "custom/recording": {
       "exec": "pgrep -x wf-recorder > /dev/null && echo '● Recording' || echo ''",

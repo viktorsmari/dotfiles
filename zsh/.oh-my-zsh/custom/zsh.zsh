@@ -98,6 +98,7 @@ alias nvimrc='nvim ~/.config/nvim/init.vim'
 alias webcamgrab="ffmpeg -f video4linux2 -i /dev/video0 -vframes 1 -strftime 1 /tmp/%Y-%m-%d_%H-%M-%S_webcamgrab.jpg"
 alias xclip='xclip -selection c'
 alias sconfig='vi ~/dotfiles/sway/.sway/config'
+alias hconfig='vi ~/dotfiles/hypr/.config/hypr/hyprland.conf'
 
 # Folders
 alias y="cd ~/dev/youwind/"
