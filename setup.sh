@@ -73,6 +73,9 @@ if [[ $USE_DEP = 'y' ]]; then
   # Packages for Wayland
   sudo apt-get install -y wl-clipboard \
     grim grimshot \
+    dolphin \
+    mako-notifier \
+    playerctl \
     wf-recorder
 
   sudo apt-get install -y silversearcher-ag pwgen powerline \
