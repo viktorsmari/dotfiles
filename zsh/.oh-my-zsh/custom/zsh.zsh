@@ -99,6 +99,7 @@ alias webcamgrab="ffmpeg -f video4linux2 -i /dev/video0 -vframes 1 -strftime 1 /
 alias xclip='xclip -selection c'
 alias sconfig='vi ~/dotfiles/sway/.sway/config'
 alias hconfig='vi ~/dotfiles/hypr/.config/hypr/hyprland.conf'
+alias vd='{ git ls-files -m -z; git diff --cached --name-only --diff-filter=ACMR -z; git ls-files --others --exclude-standard -z; } | sort -zu | xargs -0 -o -r nvim -p --'
 
 # Folders
 alias y="cd ~/dev/youwind/"
