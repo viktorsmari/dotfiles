@@ -123,8 +123,11 @@ if [[ $USE_OHMZ = 'y' ]]; then
   echo -e "\n======== Setup oh-my-zsh ========\n"
   echo -e "Remember to check if there is a newer way of installing oh-my-zsh?\n"
 
+  # Ensure oh-my-zsh prerequisites are present even when USE_DEP is not selected.
+  sudo apt-get install -y zsh git curl
+
   # Change default shell to ZSH for current user (not root)
-  chsh -s /bin/zsh
+  chsh -s "$(which zsh)"
 
   # install oh my zsh (use curl, ensured installed above)
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -133,9 +136,15 @@ if [[ $USE_OHMZ = 'y' ]]; then
   stow zsh
 
   echo -e "\ncloning zsh-autosuggestions... did not work the last time!\n"
-  source "$HOME/dotfiles/scripts/install_zsh-autosuggestions.sh"
+  zsh "$HOME/dotfiles/scripts/install_zsh-autosuggestions.sh"
 
-  omz plugin enable git z zsh-autosuggestions
+  # Use the official OMZ CLI from an interactive zsh session.
+  if zsh -ic 'command -v omz >/dev/null 2>&1'; then
+    zsh -ic 'omz plugin enable git z zsh-autosuggestions'
+  else
+    echo "omz command not available; could not enable plugins via OMZ CLI."
+  fi
+
   echo "If your shell is not zsh after running this script, please log out and log back in, or run 'zsh' manually."
 fi
 
