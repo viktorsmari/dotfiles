@@ -129,11 +129,21 @@ if [[ $USE_OHMZ = 'y' ]]; then
   # Ensure oh-my-zsh prerequisites are present even when USE_DEP is not selected.
   sudo apt-get install -y zsh git curl
 
-  # Change default shell to ZSH for current user (not root)
-  chsh -s "$(which zsh)"
+  zsh_path="$(command -v zsh)"
+  current_shell="$(getent passwd "$USER" | cut -d: -f7)"
+  if [[ "$current_shell" == "$zsh_path" ]]; then
+    echo "Default shell is already zsh, skipping chsh."
+  else
+    # Change default shell to ZSH for current user. usermod only needs sudo/root.
+    sudo usermod --shell "$zsh_path" "$USER"
+  fi
 
-  # install oh my zsh (use curl, ensured installed above)
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  if [[ -d "$HOME/.oh-my-zsh" ]]; then
+    echo "Oh My Zsh is already installed, skipping installer."
+  else
+    # install oh my zsh without starting an interactive zsh at the end
+    ZSH= RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  fi
 
   # link my zsh config
   stow zsh
@@ -141,9 +151,16 @@ if [[ $USE_OHMZ = 'y' ]]; then
   echo -e "\ncloning zsh-autosuggestions... did not work the last time!\n"
   zsh "$HOME/dotfiles/scripts/install_zsh-autosuggestions.sh"
 
-  # Use the official OMZ CLI from an interactive zsh session.
-  if zsh -ic 'command -v omz >/dev/null 2>&1'; then
-    zsh -ic 'omz plugin enable git z zsh-autosuggestions'
+  # Use the official OMZ CLI without an interactive shell; interactive OMZ reloads by exec'ing zsh.
+  if zsh -fc 'source "$HOME/.zshrc" >/dev/null 2>&1 && command -v omz >/dev/null 2>&1'; then
+    zsh -fc '
+      source "$HOME/.zshrc" >/dev/null 2>&1 || exit 1
+      plugins_to_enable=()
+      for plugin in git z zsh-autosuggestions; do
+        (( ${plugins[(Ie)$plugin]} )) || plugins_to_enable+=("$plugin")
+      done
+      (( ${#plugins_to_enable} == 0 )) || omz plugin enable "${plugins_to_enable[@]}"
+    '
   else
     echo "omz command not available; could not enable plugins via OMZ CLI."
   fi

@@ -2,7 +2,7 @@
 # Ensure ZSH_CUSTOM points to the standard location if not already set
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
-echo 'You should _source_ this file from zsh'
+echo 'Installing zsh-autosuggestions for Oh My Zsh'
 echo -e "ZSH_CUSTOM path: ${ZSH_CUSTOM}\n"
 
 mkdir -p "${ZSH_CUSTOM}/plugins"
