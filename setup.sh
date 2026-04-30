@@ -76,6 +76,7 @@ if [[ $USE_DEP = 'y' ]]; then
     dolphin \
     mako-notifier \
     playerctl \
+    swappy \
     wf-recorder
 
   sudo apt-get install -y silversearcher-ag pwgen powerline \
