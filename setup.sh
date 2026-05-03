@@ -1,6 +1,8 @@
 #!/bin/bash
 
 ensure_installed() {
+  sudo apt-get update
+
   if ! command -v gum &> /dev/null; then
     echo "gum could not be found, installing gum..."
     sudo apt-get install -y gum
@@ -28,7 +30,7 @@ echo "Cloning repo and linking configs..."
 if [ -d "$HOME/dotfiles" ]; then
   echo "Directory ~/dotfiles already exists. Not cloning repo again!"
 else
-  echo "Cloning i3 repo..."
+  echo "Cloning dotfiles repo..."
   git clone https://github.com/viktorsmari/dotfiles.git "$HOME/dotfiles"
 fi
 
@@ -39,12 +41,13 @@ mkdir -p "$HOME/Pictures/screenshots"
 
 picked=$(
   printf '%s\n' \
-    "apt dependencies" "sway" "i3" "oh-my-zsh" "neovim + plugins" \
+    "apt dependencies" "hyprland" "sway" "i3" "oh-my-zsh" "neovim + plugins" \
     "vim + plugins" "mise" "git config" \
-  | gum choose --no-limit --selected "sway" --selected "mise" \
+  | gum choose --no-limit --selected "apt dependencies" --selected "hyprland" --selected "mise" \
   --header "Select what to install (SPACE to toggle):"
 ) || exit 1
 
+grep -Fxq "hyprland" <<<"$picked"         && USE_HYPRLAND=y
 grep -Fxq "sway" <<<"$picked"             && USE_SWAY=y
 grep -Fxq "i3" <<<"$picked"               && USE_I3=y
 grep -Fxq "apt dependencies" <<<"$picked" && USE_DEP=y
@@ -56,8 +59,6 @@ grep -Fxq "git config" <<<"$picked"       && USE_GIT=y
 
 if [[ $USE_DEP = 'y' ]]; then
   echo -e "======== Install programs ========\n"
-
-  sudo apt-get update
 
   # VIP packages
   sudo apt-get install -y curl nmap zsh g++ automake make \
@@ -72,8 +73,7 @@ if [[ $USE_DEP = 'y' ]]; then
 
   # Packages for Wayland
   sudo apt-get install -y wl-clipboard \
-    grim grimshot \
-    dolphin \
+    grim grimshot slurp \
     mako-notifier \
     playerctl \
     swappy \
@@ -82,13 +82,24 @@ if [[ $USE_DEP = 'y' ]]; then
   sudo apt-get install -y silversearcher-ag pwgen powerline \
     postgresql postgresql-contrib libpq-dev \
     inotify-tools jq ncdu \
+    dolphin \
+    wofi \
     fuzzel \
-    i3status \
-    libpq-dev zlib1g-dev
+    kitty ghostty \
+    zlib1g-dev
 
   # Packages for X
   sudo apt-get install -y xbacklight xclip \
     xfce4-clipman rofi flameshot arandr
+fi
+
+if [[ $USE_HYPRLAND = 'y' ]]; then
+  sudo apt-get install -y hyprland \
+    hypridle hyprlock \
+    waybar \
+    brightnessctl
+
+  stow hypr
 fi
 
 if [[ $USE_SWAY = 'y' ]]; then
@@ -96,7 +107,7 @@ if [[ $USE_SWAY = 'y' ]]; then
 fi
 
 if [[ $USE_I3 = 'y' ]]; then
-  sudo apt-get install -y i3
+  sudo apt-get install -y i3 i3status
 
   # Link i3 status bar
   ln -s "$HOME/dotfiles/i3status.conf" "$HOME/.i3status.conf"
