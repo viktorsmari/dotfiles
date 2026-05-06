@@ -6,69 +6,57 @@ import subprocess
 import sys
 
 
-def metadata(player):
-    cmd = [
-        "playerctl",
-        f"--player={player}",
-        "--no-messages",
-        "metadata",
-        "--format",
-        "{{status}}\n{{artist}}\n{{title}}\n{{mpris:trackid}}",
-    ]
-
-    try:
-        result = subprocess.run(
-            cmd,
-            check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            text=True,
-        )
-    except (FileNotFoundError, subprocess.CalledProcessError):
-        return None
-
-    lines = result.stdout.rstrip("\n").split("\n", 3)
-    while len(lines) < 4:
-        lines.append("")
-
-    return {
-        "status": lines[0],
-        "artist": lines[1],
-        "title": lines[2],
-        "trackid": lines[3],
-    }
-
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--player", default="spotify")
     args = parser.parse_args()
 
-    data = metadata(args.player)
-    if not data:
-        print(json.dumps({"text": "", "alt": args.player, "class": args.player}))
-        return
+    cmd = [
+        "playerctl",
+        f"--player={args.player}",
+        "--follow",
+        "metadata",
+        "--format",
+        "{{status}}\n{{artist}}\n{{title}}\n{{mpris:trackid}}".replace("\\n", "\n"),
+    ]
 
-    if args.player == "spotify" and ":ad:" in data["trackid"]:
-        text = "Advertisement"
-    elif data["artist"] and data["title"]:
-        text = f"{data['artist']} - {data['title']}"
-    else:
-        text = data["title"] or data["artist"]
+    proc = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+        text=True,
+    )
 
-    if text:
-        icon = "▶" if data["status"] == "Playing" else "⏸"
-        text = f"{icon} {text}"
+    lines = []
+    for line in proc.stdout:
+        line = line.rstrip("\n")
+        lines.append(line)
+        if len(lines) < 4:
+            continue
 
-    print(json.dumps({
-        "text": text,
-        "alt": args.player,
-        "class": data["status"].lower(),
-    }))
+        status, artist, title, trackid = lines
+        lines = []
+
+        if args.player == "spotify" and ":ad:" in trackid:
+            text = "Advertisement"
+        elif artist and title:
+            text = f"{artist} - {title}"
+        else:
+            text = title or artist
+
+        if text:
+            icon = ">" if status == "Playing" else "||"
+            text = f"{icon} {text}"
+
+        print(json.dumps({
+            "text": text,
+            "alt": args.player,
+            "class": status.lower(),
+        }), flush=True)
 
 
 if __name__ == "__main__":
     try:
         main()
-    except BrokenPipeError:
+    except (BrokenPipeError, KeyboardInterrupt):
         sys.exit(0)

@@ -56,6 +56,7 @@ window#waybar {
 #custom-logo,
 #custom-power,
 #custom-spotify,
+#custom-media,
 #custom-notification,
 #cpu,
 #disk,
@@ -97,6 +98,10 @@ window#waybar.empty #window {
 
 #clock {
   color: #74c7ec;
+}
+
+#custom-media {
+  color: #a6e3a1;
 }
 
 #clock.simpleclock {
