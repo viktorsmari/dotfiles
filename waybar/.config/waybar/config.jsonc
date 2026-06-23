@@ -13,7 +13,7 @@
     "modules-center": [
         //"hyprland/window",
         "clock",
-        "custom/media"
+        "mpris"
     ],
     "modules-right": [
         "mpd",
@@ -133,12 +133,16 @@
         },
         "on-click": "pavucontrol"
     },
-    "custom/media": {
-        "format": "{text}",
-        "return-type": "json",
-        "max-length": 40,
-        "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null"
+    "mpris": {
+        "player": "spotify",
+        "format": "{status_icon} {artist} - {title}",
+        "format-paused": "{status_icon} {artist} - {title}",
+        "format-stopped": "",
+        "status-icons": {
+            "playing": ">",
+            "paused": "||",
+            "stopped": ""
+        }
     },
     "custom/recording": {
         "exec": "pgrep -x wf-recorder > /dev/null && echo '● REC' || echo ''",
