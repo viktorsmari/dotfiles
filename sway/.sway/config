@@ -20,6 +20,7 @@ set $term alacritty
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 set $menu dmenu_path | dmenu | xargs swaymsg exec --
+set $menu2 noctalia msg panel-toggle launcher
 
 include /etc/sway/config-vars.d/*
 titlebar_border_thickness 0
@@ -78,6 +79,7 @@ bindsym $mod+Shift+q kill
 #bindsym $mod+d exec $menu
 bindsym $mod+Shift+d exec rofi -show combi -theme solarized -font "hack 10" -icon-theme "Papirus" -show-icons
 bindsym $mod+d exec fuzzel
+bindsym $mod+Space exec $menu2
 
 # Start cliphist watcher once per session
 exec_always wl-paste --type text  --watch cliphist store
@@ -126,8 +128,8 @@ bindsym $mod+Shift+Right move right
 # Workspaces:
 #
 set $ws1 "1:Chrome"
-set $ws2 "2:Term"
-set $ws3 "3:Ansible"
+set $ws2 "2:Youwind"
+set $ws3 "3:Repero"
 set $ws4 "4:Term"
 set $ws5 "5:Chats"
 set $ws6 "6:Signal"
@@ -247,21 +249,11 @@ bindsym $mod+r mode "resize"
 #
 # Status Bar:
 #
-# Read `man 5 sway-bar` for more information about this section.
-bar {
-  position bottom
-
-# When the status_command prints a new line to stdout, swaybar updates.
-# The default just shows the current date and time.
-  status_command while date +'%Y-%m-%d %I:%M:%S %p'; do sleep 1; done
-  status_command i3status
-
-  colors {
-    statusline #ffffff
-    background #323232
-    inactive_workspace #000000 #222222 #cccccc
-  }
-}
+# Noctalia owns the bar. Keep this block commented to avoid a second swaybar.
+# bar {
+#   position bottom
+#   status_command i3status
+# }
 
 include /etc/sway/config.d/*
 
@@ -297,12 +289,13 @@ bindsym $mod+i input "type:keyboard" xkb_layout "is"; exec notify-send "Icelandi
 # use meta + o to switch to english layout
 bindsym $mod+o input "type:keyboard" xkb_layout "us"; exec notify-send "English" -t 1000
 
-# Tower
-output DP-2 pos 0 0 res 1920x1080
+# Tower: Dell 1080p (DP-2) on the left, LG 4K (DP-3) on the right.
+# Logical size of the 4K panel at 1.5 is 2560x1440.
+output DP-2 pos 0 0 res 1920x1080 scale 1
 output DP-3 pos 1920 0 res 3840x2160 scale 1.5
-#output DP-3 pos 1920 0 res 2560x1440
+output DP-3 scale_filter linear
 
-# Chrome opens on DP-3
+# Chrome on the 4K panel
 workspace $ws1 output DP-3
 workspace $ws2 output DP-2
 
@@ -312,6 +305,7 @@ exec swaymsg 'workspace $ws1; exec google-chrome'
 #exec pasystray
 #exec_always copyq # does not work with only exec copyq
 exec_always mako
+exec noctalia
 #exec_always dunst
 exec swaymsg 'workspace $ws2; exec alacritty --working-directory=/home/viktor/dev/youwind'
 exec swaymsg 'workspace $ws2; exec alacritty --working-directory=/home/viktor/dev/youwind'
